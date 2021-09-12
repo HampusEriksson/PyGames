@@ -1,0 +1,10 @@
+import pygame
+
+WIDTH, HEIGHT = 450, 450
+WHITE = (255, 222, 255)
+BLACK = (0,0,0)
+RED = (255,0,0)
+YELLOW = (255,255,0)
+FPS = 60
+BOARD_SIZE = 3
+
