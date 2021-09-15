@@ -1,16 +1,13 @@
 import pygame
-import os
 from threeconst import *
-import numpy as np
 import time
 import sys
 
 pygame.font.init()
 pygame.init()
 
-# Skapar ett fönster
 WIN = pygame.display.set_mode((WIDTH, HEIGHT))
-pygame.display.set_caption("Three in row")
+pygame.display.set_caption(str(BOARD_SIZE) + " in a row")
 
 
 def draw_window(board):
@@ -20,58 +17,67 @@ def draw_window(board):
 
     pygame.display.update()
 
+
 def checkwin(board):
 
     for row in board:
         if row[0].text != "" and len(set([x.text for x in row])) == 1:
             return True
 
-    for row in np.flip(board):
+    for row in flip(board):
         if row[0].text != "" and len(set([x.text for x in row])) == 1:
             return True
+
+    diag1 = [board[i][i].text for i in range(len(board))]
+    diag2 = [board[i][len(board) - 1 - i].text for i in range(len(board))]
+
+    if (diag1[0] != "" and len(set(diag1)) == 1) or (
+        diag2[0] != "" and len(set(diag2)) == 1
+    ):
+        return True
 
     return False
 
 
-
 def main():
-    buttons = []
     clock = pygame.time.Clock()
-    board = [["", "", ""], ["","",""], ["", "", ""]]
-    print(board)
+    board = [["" for x in range(BOARD_SIZE)] for x in range(BOARD_SIZE)]
     turn = 0
 
     game_over = False
 
-    for x in range(3):
-        for y in range(3):
-            print("Adding button")
-            board[x][y] = Button(WHITE, x*150, y*150, 145, 145)
-            #buttons.append(Button(WHITE, x*150, y*150, 145, 145))
-
+    for row in range(BOARD_SIZE):
+        for col in range(BOARD_SIZE):
+            board[row][col] = Button(
+                WHITE,
+                col * (WIDTH // BOARD_SIZE),
+                row * (HEIGHT // BOARD_SIZE),
+                WIDTH // BOARD_SIZE-3,
+                HEIGHT // BOARD_SIZE-3,
+            )
 
     while not game_over:
         clock.tick(FPS)
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                run = False
                 pygame.quit()
                 sys.exit(0)
 
             if event.type == pygame.MOUSEBUTTONDOWN:
-
                 for row in board:
                     for cell in row:
-                        if cell.isOver(pygame.mouse.get_pos(),PLAYERMARKS[turn % 2]):
+                        if cell.isClicked(
+                            pygame.mouse.get_pos(), PLAYERMARKS[turn % 2]
+                        ):
                             turn += 1
                             game_over = checkwin(board)
+
+        for row in board:
+            for cell in row:
+                cell.isOver(pygame.mouse.get_pos())
 
         draw_window(board)
 
 
-
-
 if __name__ == "__main__":
     main()
-
-
