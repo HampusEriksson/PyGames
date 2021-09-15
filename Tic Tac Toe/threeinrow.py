@@ -1,6 +1,4 @@
-import pygame
 from threeconst import *
-import time
 import sys
 
 pygame.font.init()

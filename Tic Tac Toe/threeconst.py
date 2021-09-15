@@ -1,13 +1,15 @@
 import pygame
 
 WIDTH, HEIGHT = 600,600
+FPS = 60
+BOARD_SIZE = 3
+
 WHITE = (255, 255, 255)
 PINK = (255, 200, 255)
 BLACK = (0, 0, 0)
 RED = (255, 0, 0)
 YELLOW = (255, 255, 0)
-FPS = 60
-BOARD_SIZE = 3
+
 PLAYERMARKS = ["X", "O"]
 
 def flip(array):
@@ -60,3 +62,5 @@ class Button():
                 return
 
         self.color = WHITE
+
+WHITE if () else BLACK
