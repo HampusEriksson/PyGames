@@ -9,6 +9,7 @@ pygame.display.set_caption(str(BOARD_SIZE) + " in a row")
 
 
 def draw_window(board):
+
     for row in board:
         for cell in row:
             cell.draw(WIN)

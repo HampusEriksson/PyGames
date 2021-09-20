@@ -1,3 +1,4 @@
+
 import pygame
 from snakeconst import *
 import time
@@ -11,6 +12,8 @@ pygame.display.set_caption("Snake")
 
 
 def draw_window(win, all_sprites):
+    win.fill(0)
+
     all_sprites.draw(win)
 
     pygame.display.update()
@@ -22,17 +25,18 @@ def main():
     all_sprites = pygame.sprite.Group()
 
     apple = Apple()
-    game_over = False
-    head = Snakepart(WIDTH//2, HEIGHT//2)
+    all_sprites.add(apple)
 
+    game_over = False
+    head = Snakepart()
+    all_sprites.add(head)
     apple.move()
 
     while not game_over:
         clock.tick(FPS)
-        head.x += head.direction[0]*SPEED
-        head.y += head.direction[1]*SPEED
+        head.update()
 
-        if head.collidepoint((apple.x,apple.y)):
+        if head.collide(apple):
             apple.move()
 
         for event in pygame.event.get():
