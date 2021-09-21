@@ -1,7 +1,5 @@
-
 import pygame
 from snakeconst import *
-import time
 import sys
 
 pygame.font.init()
