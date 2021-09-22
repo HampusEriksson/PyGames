@@ -11,43 +11,49 @@ WIN = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("Snake")
 
 
-def draw_window(win, all_sprites):
-    win.fill(0)
-    all_sprites.draw(win)
+def draw_window(WIN, score, *spritegroups):
+    WIN.fill(0)
+
+    score_text = SCORE_FONT.render(
+        "Score: " + str(score), 1, WHITE)
+    WIN.blit(score_text, (10, 10))
+
+    for group in spritegroups:
+        group.draw(WIN)
+        
     pygame.display.update()
-
-
 
 def main():
     score = 0
     clock = pygame.time.Clock()
-    all_sprites = pygame.sprite.Group()
+    game_over = False
+
+    bodygroup, applegroup, headgroup = (pygame.sprite.Group() for _ in range(3))
 
     apple = Apple()
-    all_sprites.add(apple)
-    game_over = False
-    head = Snakepart()
-    all_sprites.add(head)
+    applegroup.add(apple)
     apple.move()
-    body = []
+    print(len(applegroup))
+
+    head = Snakepart(color=PINK)
+    headgroup.add(head)
 
     while not game_over:
         clock.tick(FPS)
 
-
-        if head.collide(apple):
+        if head.collide(applegroup):
             apple.move()
-            part = Snakepart()
-            all_sprites.add(part)
-            body.append(part)
+
             head.speed *= 1.02
             score +=1
+            part = Snakepart()
+            bodygroup.add(part)
 
-        newpos = [head.rect.center] + [x.rect.center for x in body]
+        newpos = [head.rect.center] + [x.rect.center for x in bodygroup]
 
-        if len(body) >= 1:
-            for i in range(len(body)):
-                body[i].rect.center = newpos[i]
+        if len(bodygroup) >= 1:
+            for i, part in enumerate(bodygroup):
+                part.rect.center = newpos[i]
 
         head.update()
         for event in pygame.event.get():
@@ -67,7 +73,7 @@ def main():
 
 
 
-        draw_window(WIN, all_sprites)
+        draw_window(WIN, score, bodygroup, applegroup, headgroup)
 
 
 if __name__ == "__main__":
