@@ -1,5 +1,4 @@
 
-import pygame
 from snakeconst import *
 import time
 import sys
