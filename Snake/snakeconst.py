@@ -1,5 +1,6 @@
 import random
 import pygame
+pygame.font.init()
 
 WIDTH, HEIGHT = 600,600
 WHITE = (255, 255, 255)
@@ -10,6 +11,7 @@ YELLOW = (255, 255, 0)
 GREEN = (40,100,20)
 APPLESIZE = 50
 UNITSIZE = 30
+SCORE_FONT = pygame.font.SysFont('comicsans', 40)
 
 FPS = 60
 
@@ -39,9 +41,6 @@ class Snakepart(pygame.sprite.Sprite):
             self.rect.bottom = 0
 
     def collide(self, spritegroup):
-        if type(spritegroup) != list:
-            spritegroup = [spritegroup]
-
         if pygame.sprite.spritecollide(self,spritegroup, False):
             print("Collision")
             return True
