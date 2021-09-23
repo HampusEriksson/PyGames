@@ -2,7 +2,7 @@ import pygame
 
 WIDTH, HEIGHT = 600,600
 FPS = 60
-BOARD_SIZE = 3
+BOARD_SIZE = 5
 
 WHITE = (255, 255, 255)
 PINK = (255, 200, 255)

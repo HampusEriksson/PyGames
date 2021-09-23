@@ -1,6 +1,4 @@
-
 from snakeconst import *
-import time
 import sys
 
 pygame.font.init()
@@ -8,7 +6,6 @@ pygame.init()
 
 WIN = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("Snake")
-
 
 def draw_window(WIN, score, *spritegroups):
     WIN.fill(0)
@@ -32,17 +29,17 @@ def main():
     apple = Apple()
     applegroup.add(apple)
     apple.move()
-    print(len(applegroup))
 
     head = Snakepart(color=PINK)
     headgroup.add(head)
+    counter = 0
 
     while not game_over:
         clock.tick(FPS)
 
+
         if head.collide(applegroup):
             apple.move()
-
             head.speed *= 1.02
             score +=1
             part = Snakepart()
@@ -53,8 +50,9 @@ def main():
         if len(bodygroup) >= 1:
             for i, part in enumerate(bodygroup):
                 part.rect.center = newpos[i]
+        if counter % 10 == 0:
+            head.update()
 
-        head.update()
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
@@ -69,8 +67,6 @@ def main():
                     head.direction = (0,1) if head.direction != (0,-1) else head.direction
                 if event.key == pygame.K_d:
                     head.direction = (1,0) if head.direction != (-1,0) else head.direction
-
-
 
         draw_window(WIN, score, bodygroup, applegroup, headgroup)
 

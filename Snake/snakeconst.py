@@ -28,6 +28,7 @@ class Snakepart(pygame.sprite.Sprite):
     def update(self):
         self.rect.x += self.direction[0]*self.speed
         self.rect.y += self.direction[1]*self.speed
+
         if self.rect.left > WIDTH:
             self.rect.right = 0
 
@@ -48,13 +49,12 @@ class Snakepart(pygame.sprite.Sprite):
 
 
 class Apple(pygame.sprite.Sprite):
-    def __init__(self, x=WIDTH//2, y=HEIGHT//2, color=RED):
+    def __init__(self, color=RED):
         pygame.sprite.Sprite.__init__(self)
 
         self.image = pygame.Surface((APPLESIZE, APPLESIZE))
         self.image.fill(color)
         self.rect = self.image.get_rect()
-        self.rect.center = (APPLESIZE // 2, APPLESIZE // 2)
 
     def move(self):
         print("moving")
