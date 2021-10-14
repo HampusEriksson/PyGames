@@ -13,6 +13,15 @@ BLACK = (0, 0, 0)
 RED = (255, 0, 0)
 YELLOW = (255, 255, 0)
 
+MEW = pygame.image.load("Assets/mew.png")
+MEW = pygame.transform.scale(MEW,(int(MEW.get_width()*0.2), int(MEW.get_height()*0.2)))
+
+EEVEE = pygame.image.load("Assets/eevee.png")
+EEVEE = pygame.transform.scale(EEVEE,(int(EEVEE.get_width()*0.2), int(EEVEE.get_height()*0.2)))
+
+TURTWIG = pygame.image.load("Assets/turtwig.png")
+TURTWIG = pygame.transform.scale(TURTWIG,(int(TURTWIG.get_width()*0.2), int(TURTWIG.get_height()*0.2)))
+
 class Button:
     def __init__(self, image, y, cost, value):
         self.width = WIDTH // 5
