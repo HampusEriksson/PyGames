@@ -1,12 +1,15 @@
+from constants import *
 import pygame
 from pygame.locals import *
 
 pygame.init()
 
-screen_width = 600
-screen_height = 600
-screen = pygame.display.set_mode((screen_width, screen_height))
-pygame.display.set_caption("Game Title")
+
+screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+pygame.display.set_caption("Ballz")
+
+game = Game(screen)
+
 
 run = True
 
@@ -15,6 +18,7 @@ while run:
         if event.type == pygame.QUIT:
             run = False
 
+    game.draw()
     pygame.display.update()
 
 
