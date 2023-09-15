@@ -33,8 +33,24 @@ class Game:
             if random.random() < 0.8:
                 self.tiles.append(Tiles(i * TILE_SIZE, TILE_SIZE//2, self))
 
+            else:
+                self.tiles.append(Extra(i * TILE_SIZE, TILE_SIZE//2, self))
 
 
+class Extra:
+    def __init__(self, x, y, game) -> None:
+        self.x = x
+        self.y = y
+        self.rect = pygame.Rect(x, y, TILE_SIZE, TILE_SIZE)
+        self.game = game
+        self.font = pygame.font.SysFont('Arial', 25)
+
+    def draw(self, screen):
+        pygame.draw.rect(screen, (255, 255, 255), self.rect)
+
+    def move_down(self):
+        self.y += TILE_SIZE
+        self.rect.y = self.y
 
 class Tiles:
     def __init__(self, x, y, game) -> None:
@@ -87,13 +103,16 @@ class Ball:
             # Check for collision with tiles
             for tile in self.game.tiles:
                 if self.rect.colliderect(tile.rect):
-                    tile.number -= 1
-                    if tile.number <= 0:
-                        # Remove tile
-                        self.game.tiles.remove(tile)
+                    if isinstance(tile, Tiles):
+                        tile.number -= 1
+                        if tile.number <= 0:
+                            # Remove tile
+                            self.game.tiles.remove(tile)
 
-                    self.direction = (self.direction[0], -self.direction[1])
-                    break
+                        self.direction = (self.direction[0], -self.direction[1])
+                        break
+                    elif isinstance(tile, Extra):
+                        self.game.add_ball()
 
 
 

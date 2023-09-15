@@ -28,6 +28,8 @@ while run:
             for ball in game.balls:
                 ball.direction = direction
                 ball.moving = True
+                ball.update()
+                pygame.time.delay(10)
             
     if all(ball.moving == False for ball in game.balls) and balls_moving == True:
         balls_moving = False
@@ -37,10 +39,11 @@ while run:
 
     for ball in game.balls:
         ball.update()
+
     game.draw()
     pygame.display.update()
 
-    if any(tile for tile in game.tiles if tile.y >= SCREEN_HEIGHT-50):
+    if any(tile for tile in game.tiles if tile.y >= SCREEN_HEIGHT):
         run = False
         print("Game Over")
         print("Level:", game.level)
