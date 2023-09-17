@@ -1,7 +1,9 @@
 import pygame, random
+
 SCREEN_WIDTH = 600
 SCREEN_HEIGHT = 1000
 TILE_SIZE = SCREEN_WIDTH // 8
+
 
 class Game:
     def __init__(self, screen) -> None:
@@ -19,6 +21,13 @@ class Game:
         for tile in self.tiles:
             tile.draw(self.screen)
 
+        self.screen.blit(
+            pygame.font.SysFont("Arial", 25).render(
+                f"Balls: {str(len(self.balls))}", True, (255, 0, 0)
+            ),
+            (0, 0),
+        )
+
     def add_ball(self):
         self.balls.append(Ball(self))
 
@@ -30,11 +39,12 @@ class Game:
 
     def add_tiles(self):
         for i in range(8):
-            if random.random() < 0.8:
-                self.tiles.append(Tiles(i * TILE_SIZE, TILE_SIZE//2, self))
+            choice = random.random()
+            if choice < 0.7:
+                self.tiles.append(Tiles(i * TILE_SIZE, TILE_SIZE // 2, self))
 
-            else:
-                self.tiles.append(Extra(i * TILE_SIZE, TILE_SIZE//2, self))
+            elif choice < 0.8:
+                self.tiles.append(Extra(i * TILE_SIZE, TILE_SIZE // 2, self))
 
 
 class Extra:
@@ -43,7 +53,7 @@ class Extra:
         self.y = y
         self.rect = pygame.Rect(x, y, TILE_SIZE, TILE_SIZE)
         self.game = game
-        self.font = pygame.font.SysFont('Arial', 25)
+        self.font = pygame.font.SysFont("Arial", 25)
 
     def draw(self, screen):
         pygame.draw.rect(screen, (255, 255, 255), self.rect)
@@ -52,22 +62,27 @@ class Extra:
         self.y += TILE_SIZE
         self.rect.y = self.y
 
+
 class Tiles:
     def __init__(self, x, y, game) -> None:
         self.x = x
         self.y = y
-        self.number = random.randint(game.level, game.level+5)
+        self.number = random.randint(game.level, game.level + 5)
         self.rect = pygame.Rect(x, y, TILE_SIZE, TILE_SIZE)
         self.game = game
-        self.font = pygame.font.SysFont('Arial', 25)
+        self.font = pygame.font.SysFont("Arial", 25)
 
     def draw(self, screen):
         pygame.draw.rect(screen, (155, 155, 155), self.rect)
-        self.game.screen.blit(self.font.render(str(self.number), True, (255,0,0)), (self.x + TILE_SIZE//2, self.y+TILE_SIZE//2))
+        self.game.screen.blit(
+            self.font.render(str(self.number), True, (255, 0, 0)),
+            (self.x + TILE_SIZE // 2, self.y + TILE_SIZE // 2),
+        )
 
     def move_down(self):
         self.y += TILE_SIZE
         self.rect.y = self.y
+
 
 class Ball:
     def __init__(self, game) -> None:
@@ -77,17 +92,30 @@ class Ball:
         self.game = game
         self.moving = False
 
+    @property
+    def position(self):
+        return (self.x, self.y)
+
+    @position.setter
+    def position(self, pos):
+        self.x = pos[0]
+        self.y = pos[1]
+        self.rect.x = self.x
+        self.rect.y = self.y
+
     def draw(self, screen):
         pygame.draw.rect(screen, (255, 255, 255), self.rect)
+
     def reset_position(self):
         self.x = SCREEN_WIDTH / 2
         self.y = SCREEN_HEIGHT - 50
         self.rect.x = self.x
         self.rect.y = self.y
+
     def update(self):
         if self.moving == True:
-            self.x += self.direction[0]
-            self.y += self.direction[1]
+            self.x += self.direction[0] * 100
+            self.y += self.direction[1] * 100
             self.rect.x = self.x
             self.rect.y = self.y
             # Check for collision with walls
@@ -96,7 +124,7 @@ class Ball:
             if self.rect.top <= 0:
                 self.direction = (self.direction[0], -self.direction[1])
             # Reset ball if it hits the bottom
-            if self.rect.bottom >= SCREEN_HEIGHT:
+            if self.rect.bottom >= SCREEN_HEIGHT and self.direction[1] > 0:
                 self.moving = False
                 self.reset_position()
 
@@ -112,7 +140,5 @@ class Ball:
                         self.direction = (self.direction[0], -self.direction[1])
                         break
                     elif isinstance(tile, Extra):
+                        self.game.tiles.remove(tile)
                         self.game.add_ball()
-
-
-

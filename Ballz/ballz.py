@@ -25,17 +25,17 @@ while run:
             dy = pos[1] - (SCREEN_HEIGHT - 50)
             distance = max(1, pygame.math.Vector2(dx, dy).length())
             direction = (dx / distance, dy / distance)
-            for ball in game.balls:
+            for i, ball in enumerate(game.balls):
                 ball.direction = direction
                 ball.moving = True
-                ball.update()
-                pygame.time.delay(10)
-            
+                new_x = ball.position[0] - direction[0] * 100 * i
+                new_y = ball.position[1] - direction[1] * 100 * i
+
+                ball.position = (new_x, new_y)
+
     if all(ball.moving == False for ball in game.balls) and balls_moving == True:
         balls_moving = False
         game.level_up()
-
-            
 
     for ball in game.balls:
         ball.update()
