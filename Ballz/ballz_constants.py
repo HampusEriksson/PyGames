@@ -114,8 +114,8 @@ class Ball:
 
     def update(self):
         if self.moving == True:
-            self.x += self.direction[0] * 100
-            self.y += self.direction[1] * 100
+            self.x += self.direction[0] * 5
+            self.y += self.direction[1] * 5
             self.rect.x = self.x
             self.rect.y = self.y
             # Check for collision with walls
