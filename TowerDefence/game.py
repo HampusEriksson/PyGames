@@ -27,6 +27,9 @@ def draw():
     for enemy in game.enemies:
         enemy.update()
 
+    for bullet in game.bullets:
+        bullet.update()
+
     pygame.draw.rect(screen, BLACK, (0, GAME_HEIGHT, GAME_WIDTH, 200))
 
 for x in range(GRID_WIDTH):
@@ -42,6 +45,17 @@ while run:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             run = False
+        elif event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
+            x, y = event.pos
+            for tile in game.tiles:
+                if isinstance(tile, Grass) and tile.rect.collidepoint(x, y):
+                    if game.gold >= 10:
+                        tile.tower = Tower(tile.x, tile.y, game)
+                        game.gold -= 10
+                    else:
+                        print("Not enough gold")
+            
+          
 
     draw()
     pygame.display.update()
