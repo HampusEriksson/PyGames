@@ -7,17 +7,18 @@ pygame.init()
 WIN = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("Snake")
 
+
 def draw_window(WIN, score, *spritegroups):
     WIN.fill(0)
 
-    score_text = SCORE_FONT.render(
-        "Score: " + str(score), 1, WHITE)
+    score_text = SCORE_FONT.render("Score: " + str(score), 1, WHITE)
     WIN.blit(score_text, (10, 10))
 
     for group in spritegroups:
         group.draw(WIN)
-        
+
     pygame.display.update()
+
 
 def main():
     score = 0
@@ -37,11 +38,10 @@ def main():
     while not game_over:
         clock.tick(FPS)
 
-
         if head.collide(applegroup):
             apple.move()
             head.speed *= 1.02
-            score +=1
+            score += 1
             part = Snakepart()
             bodygroup.add(part)
 
@@ -59,14 +59,26 @@ def main():
                 sys.exit(0)
 
             if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_ESCAPE:
+                    pygame.quit()
+                    sys.exit(0)
+
                 if event.key == pygame.K_w:
-                    head.direction = (0,-1) if head.direction != (0,1) else head.direction
+                    head.direction = (
+                        (0, -1) if head.direction != (0, 1) else head.direction
+                    )
                 if event.key == pygame.K_a:
-                    head.direction = (-1,0) if head.direction != (1,0) else head.direction
+                    head.direction = (
+                        (-1, 0) if head.direction != (1, 0) else head.direction
+                    )
                 if event.key == pygame.K_s:
-                    head.direction = (0,1) if head.direction != (0,-1) else head.direction
+                    head.direction = (
+                        (0, 1) if head.direction != (0, -1) else head.direction
+                    )
                 if event.key == pygame.K_d:
-                    head.direction = (1,0) if head.direction != (-1,0) else head.direction
+                    head.direction = (
+                        (1, 0) if head.direction != (-1, 0) else head.direction
+                    )
 
         draw_window(WIN, score, bodygroup, applegroup, headgroup)
 
