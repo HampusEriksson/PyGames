@@ -31,54 +31,54 @@ def main():
     applegroup.add(apple)
     apple.move()
 
-    head = Snakepart(color=PINK)
+    head = Snakepart(center=(WIDTH // 2, HEIGHT // 2), color=PINK)
     headgroup.add(head)
-    counter = 0
 
     while not game_over:
         clock.tick(FPS)
 
         if head.collide(applegroup):
             apple.move()
-            head.speed *= 1.02
             score += 1
-            part = Snakepart()
-            bodygroup.add(part)
+            bodygroup.add(
+                Snakepart(
+                    center=(
+                        head.rect.center[0] + UNITSIZE * head.direction[0],
+                        head.rect.center[1] + UNITSIZE * head.direction[1],
+                    ),
+                    direction=bodygroup.sprites()[-1].direction
+                    if len(bodygroup) >= 1
+                    else head.direction,
+                )
+            )
 
-        newpos = [head.rect.center] + [x.rect.center for x in bodygroup]
+        head.update()
+
+        newpos = [head] + [part for part in bodygroup]
 
         if len(bodygroup) >= 1:
             for i, part in enumerate(bodygroup):
-                part.rect.center = newpos[i]
-        if counter % 10 == 0:
-            head.update()
-
+                part.direction = newpos[i].direction
+                part.update()
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
                 sys.exit(0)
 
             if event.type == pygame.KEYDOWN:
+                key_directions = {
+                    pygame.K_ESCAPE: (0, 0),
+                    pygame.K_w: (0, -1),
+                    pygame.K_a: (-1, 0),
+                    pygame.K_s: (0, 1),
+                    pygame.K_d: (1, 0),
+                }
+
+                head.direction = key_directions.get(event.key, head.direction)
+
                 if event.key == pygame.K_ESCAPE:
                     pygame.quit()
                     sys.exit(0)
-
-                if event.key == pygame.K_w:
-                    head.direction = (
-                        (0, -1) if head.direction != (0, 1) else head.direction
-                    )
-                if event.key == pygame.K_a:
-                    head.direction = (
-                        (-1, 0) if head.direction != (1, 0) else head.direction
-                    )
-                if event.key == pygame.K_s:
-                    head.direction = (
-                        (0, 1) if head.direction != (0, -1) else head.direction
-                    )
-                if event.key == pygame.K_d:
-                    head.direction = (
-                        (1, 0) if head.direction != (-1, 0) else head.direction
-                    )
 
         draw_window(WIN, score, bodygroup, applegroup, headgroup)
 
